@@ -34,11 +34,13 @@ sdata.STRAIN = zeros(NEQ, NLCASE, 'double');
 sdata.STRESS = zeros(NEQ, NLCASE, 'double');
 
 % The pre-process of Solution
-% MODEX = 1, LDLTFactor() - ColSol()     
-% MODEX = 2, Stiff2Sparse() - sdata.SPSTIFF \ Sdata.R(:, L)
-if (MODEX == 2)
+if (MODEX == 2)%%2或3时启动动力学求解程序，其中2为隐式的广义α法
 
     for L = 1:NLCASE Dynamics(L); end
+    cdata.TIM(4,:) = clock;
+    
+elseif (MODEX == 3)%%3为显式的速度verlet法
+    for L = 1:NLCASE Dynamicsverlet(L); end
     cdata.TIM(4,:) = clock;
     
 else

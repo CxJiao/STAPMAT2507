@@ -10,7 +10,7 @@
 %*                                                                 *
 %* *****************************************************************
 
-% Set paths of functions
+% Set paths of functions 
 AddPath();
 
 % Define Global Variables   

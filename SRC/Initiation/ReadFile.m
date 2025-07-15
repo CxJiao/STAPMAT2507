@@ -43,7 +43,7 @@ tmp = str2num(fgetl(IIN));
 cdata.NUMNP = int64(tmp(1));
 cdata.NUMEG = int64(tmp(2));
 cdata.NLCASE = int64(tmp(3));
-cdata.MODEX = int64(tmp(4));
+cdata.MODEX = int64(tmp(4));%%如果为3，则采用显式的速度verlet格式求解。
 cdata.numofeig = int64(tmp(5));%%增加了有关特征值求解的三个控制变量
 cdata.blocksize = int64(tmp(6));
 cdata.randominitial = int64(tmp(7));
@@ -51,9 +51,9 @@ cdata.randominitial = int64(tmp(7));
 if (cdata.NUMNP == 0) return; end
 cdata.NPAR = zeros(3, cdata.NUMEG, 'int64');
 
-%% Read Dynamics Parameters(Damping Matrix & Generalized Alpha Method & TimeStep)
+%% Read Dynamics Parameters(Damping Matrix & Generalized Alpha Method & TimeStep等等等等)
 sdata.MassType = 1;% default: use lumped mass
-if(cdata.MODEX == 2)
+if(cdata.MODEX == 2||3)
     tmp = str2num(fgetl(IIN));
     sdata.ENDTIME = double(tmp(1));
     sdata.CparaM =  double(tmp(2));
@@ -111,8 +111,8 @@ sdata.omega = zeros(1,cdata.numofeig,'double');
 sdata.PHI = zeros(sdata.NEQ, cdata.numofeig,'double');
 
 
-%% Read Dynamic initial value (MODEX == 2)
-if(cdata.MODEX == 2)
+%% Read Dynamic initial value (MODEX == 2或3)
+if(cdata.MODEX == 2||3)
     tmp = str2num(fgetl(IIN));
     InitialDis = int64(tmp(1));
     InitialVol = int64(tmp(2));
@@ -202,7 +202,7 @@ for N = 1:cdata.NLCASE
 end
 
 %% Read Time-Variant Load data
-if(cdata.MODEX == 2)
+if(cdata.MODEX == 2||3)
      tmp = str2num(fgetl(IIN));
      sdata.NVNL = int64(tmp(1));
 
