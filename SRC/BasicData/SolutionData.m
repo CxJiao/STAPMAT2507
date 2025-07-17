@@ -103,9 +103,6 @@ classdef SolutionData
                   %                     2 : Y-direction;
                   %                     3 : Z-direction;
         DVNL;     % double(NSTEPS,NVNL), magtitude of Time-variant Load
-        TVLN;     % id of nodes who have the Time-variant Load
-        TVLD;     % THE direction of Time-variant Load of the corresponding node id
-        TVL;      % double(NSTEPS,TVLN), the total combined Time-variant Load
 
         % Result data
         DIS;      % double, DIS(NEQ, NLCASE), Displacement of nodes
