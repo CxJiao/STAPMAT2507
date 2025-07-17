@@ -26,11 +26,15 @@ IOUT = cdata.IOUT;
 
 for N = 1:NUMEG
     NPAR1 = cdata.NPAR(1, N);
-    if (NPAR1 == 1) TrussStress(NUM, N);
-    else if(NPAR1 == 2) H20Stress(NUM,N);
-    else error(' *** ERROR *** No Such Element'); end 
+    if (NPAR1 == 1) 
+        TrussStress(NUM, N);
+    elseif(NPAR1 == 2) 
+        H20Stress(NUM,N);
+    elseif(NPAR1 == 3)
+        P4Stress(NUM,N);
+    else
+        error(' *** ERROR *** No Such Element'); 
+    end
 end
-
-
 
 end

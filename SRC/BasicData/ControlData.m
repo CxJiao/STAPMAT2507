@@ -24,7 +24,7 @@ classdef ControlData
                        %             and cross-sectional constants
         NUMEG;         % Total number of element groups, > 0
         NLCASE;        % Number of load case (>0)
-        LL;            % Load case number
+        LL;            % Load case number 感觉LL和NLAOD多工况求解时存在问题
         NLOAD;         % The number of concentrated loads applied in this load case
 
         MODEX;         % Solution mode: 0 - data check only; 1 - execution
@@ -38,5 +38,7 @@ classdef ControlData
         numofeig;      %所需的特征对个数（小于总方程数，若不想求特征对，这里输入0）
         blocksize;     %运用块lanczos迭代的块尺寸
         randominitial; %是否用随机方法生成迭代初始向量（1是0否）
+        
+        EC;            % P4 element type
     end
 end

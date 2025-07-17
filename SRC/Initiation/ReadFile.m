@@ -166,6 +166,7 @@ end
 %% Read load data
 % Init control data
 NLCASE = cdata.NLCASE;
+
 sdata.R = zeros(NEQ, NLCASE, 'double');
 R = sdata.R;
 
@@ -178,67 +179,68 @@ for N = 1:cdata.NLCASE
     cdata.LL = int64(tmp(1));
     cdata.NLOAD = int64(tmp(2));
     NLOAD = cdata.NLOAD;
-%   Init load data
-    sdata.NOD = zeros(NLOAD, 1, 'int64');
-    sdata.IDIRN = zeros(NLOAD, 1, 'int64');
-    sdata.FLOAD = zeros(NLOAD, 1, 'double');
-    NOD = sdata.NOD; IDIRN = sdata.IDIRN; FLOAD = sdata.FLOAD;
-    
+
 %   Read load data
-    for I = 1:NLOAD
-        tmp = str2num(fgetl(IIN));
-        NOD(I) = int64(tmp(1));
-        IDIRN(I) = int64(tmp(2));
-        FLOAD(I) = double(tmp(3));
+    if NLOAD > 0
+        %   Init load data
+        sdata.NOD = zeros(NLOAD, 1, 'int64');
+        sdata.IDIRN = zeros(NLOAD, 1, 'int64');
+        sdata.FLOAD = zeros(NLOAD, 1, 'double');
+        NOD = sdata.NOD; IDIRN = sdata.IDIRN; FLOAD = sdata.FLOAD;
+        for I = 1:NLOAD
+            tmp = str2num(fgetl(IIN));
+            NOD(I) = int64(tmp(1));
+            IDIRN(I) = int64(tmp(2));
+            FLOAD(I) = double(tmp(3));
+        end
+        %   Compute load vector
+        for L = 1:NLOAD
+            II = ID(IDIRN(L), NOD(L));
+            if (II > 0) 
+                R(II, N) = R(II, N) + FLOAD(L); 
+            end
+        end
+        sdata.NOD = NOD; sdata.IDIRN = IDIRN; sdata.FLOAD = FLOAD; sdata.R = R;
     end
-    if (cdata.MODEX == 0) return; end
     
-%   Compute load vector
-    for L = 1:NLOAD
-        II = ID(IDIRN(L), NOD(L));
-        if (II > 0) R(II, N) = R(II, N) + FLOAD(L); end
-    end
-    sdata.NOD = NOD; sdata.IDIRN = IDIRN; sdata.FLOAD = FLOAD; sdata.R = R;
 end
 
 %% Read Time-Variant Load data
 if(cdata.MODEX == 2||3)
      tmp = str2num(fgetl(IIN));
      sdata.NVNL = int64(tmp(1));
-
-     sdata.DLDC = zeros(1,sdata.NVNL,'int64');
-     sdata.DNOD = zeros(1,sdata.NVNL,'int64');
-     sdata.DDIRE = zeros(1,sdata.NVNL,'int64');
-     DLDC = sdata.DLDC; DNOD = sdata.DNOD; DDIRE = sdata.DDIRE;
-     sdata.DVNL = zeros(sdata.NSTEPS,sdata.NVNL,'double');
-     DVNL = sdata.DVNL;
-
-     for I = 1:sdata.NVNL
-         tmp = str2num(fgetl(IIN));
-         DLDC(I) = int64(tmp(1));
-         DNOD(I) = int64(tmp(2));
-         DDIRE(I) = int64(tmp(3));
-
-         tmp = str2num(fgetl(IIN));
-         if (length(tmp) == sdata.NSTEPS)
-             for J = 1:sdata.NSTEPS
-                 DVNL(J,I) = tmp(J);
+     if sdata.NVNL > 0
+         sdata.DLDC = zeros(1,sdata.NVNL,'int64');
+         sdata.DNOD = zeros(1,sdata.NVNL,'int64');
+         sdata.DDIRE = zeros(1,sdata.NVNL,'int64');
+         DLDC = sdata.DLDC; DNOD = sdata.DNOD; DDIRE = sdata.DDIRE;
+         sdata.DVNL = zeros(sdata.NSTEPS,sdata.NVNL,'double');
+         DVNL = sdata.DVNL;
+         
+         for I = 1:sdata.NVNL
+             tmp = str2num(fgetl(IIN));
+             DLDC(I) = int64(tmp(1));
+             DNOD(I) = int64(tmp(2));
+             DDIRE(I) = int64(tmp(3));
+             
+             tmp = str2num(fgetl(IIN));
+             if (length(tmp) == sdata.NSTEPS)
+                 for J = 1:sdata.NSTEPS
+                     DVNL(J,I) = tmp(J);
+                 end
+             else
+                 error('Time-Varient Load Input DOESN''T MATCH the Time Step!');
              end
-         else
-             error('Time-Varient Load Input DOESN''T MATCH the Time Step!');
          end
+         
+         sdata.DLDC = DLDC; sdata.DNOD = DNOD; sdata.DDIRE = DDIRE; sdata.DVNL = DVNL;
      end
 
-     sdata.DLDC = DLDC; sdata.DNOD = DNOD; sdata.DDIRE = DDIRE; sdata.DVNL = DVNL;
-
 end
 
 end
-
-
 
 %% Functions
-
 
 % InitBasicData
 function InitBasicData()

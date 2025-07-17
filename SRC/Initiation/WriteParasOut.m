@@ -16,13 +16,12 @@
 %*                                                                 *
 %* *****************************************************************
 
-function WriteParasOut()
+function WriteParasOut(fsave)
 global cdata;
 global sdata;
 % Open file
-cdata.IOUT = fopen('./Data/STAPMAT.OUT', 'w');
-%cdata.IOUT = fopen('./Data/H20_2.OUT', 'w');
-% cdata.IOUT = fopen('.\Data\EASYEXAMPLE.OUT', 'w');
+SaveFile=strcat('./Data/',fsave);
+cdata.IOUT = fopen(SaveFile, 'w');
 
 IOUT = cdata.IOUT;
 
@@ -33,14 +32,16 @@ fprintf(IOUT, ['\n %s \n\n'...
     '      NUMBER OF LOAD CASES . . . . . . . . . . . (NLCASE) = %10d \n' ...
     '      SOLUTION MODE  . . . . . . . . . . . . . . (MODEX)  = %10d \n' ...
     '         EQ.0, DATA CHECK \n' ...
-    '         EQ.1, EXECUTION'], ...
+    '         EQ.1, STATIC EXECUTION \n ' ...
+    '         EQ.2, DYNAMIC EXECUTION (IMPLICIT) \n ' ...
+    '         EQ.3, DYNAMIC EXECUTION (EXPLICIT) \n '], ...
     cdata.HED, cdata.NUMNP, cdata.NUMEG, cdata.NLCASE, cdata.MODEX);
 
 % Write complete nodal data
 ID = sdata.IDOrigin; X = sdata.X; Y = sdata.Y; Z = sdata.Z;
 fprintf(IOUT, '\n\n\n N O D A L   P O I N T   D A T A \n\n');
-fprintf(IOUT, '       NODE          BOUNDARY                         NODAL POINT\n');
-fprintf(IOUT, '      NUMBER     CONDITION  CODES                     COORDINATES\n');
+fprintf(IOUT, '   NODE              BOUNDARY               NODAL POINT\n');
+fprintf(IOUT, ' NUMBER     CONDITION  CODES       COORDINATES\n');
 fprintf(IOUT, '                    X    Y    Z               X            Y            Z\n');
 for i = 1:cdata.NUMNP
     fprintf(IOUT, '%10d      %5d%5d%5d      %13.3f%13.3f%13.3f\n', ...
@@ -64,19 +65,16 @@ end
 fprintf(IOUT, '\n\n C O N C E N T R A T E D   L O A D   C A S E   D A T A\n');
 LL = cdata.LL; NLOAD = cdata.NLOAD;
 NOD = sdata.NOD; IDIRN = sdata.IDIRN; FLOAD = sdata.FLOAD;
-for I = 1:1 %cdata.NLCASE
+for I = 1:cdata.NLCASE
     fprintf(IOUT, '\n     LOAD CASE NUMBER . . . . . . . = %10d\n', LL);
     fprintf(IOUT, '     NUMBER OF CONCENTRATED LOADS . = %10d\n', NLOAD);
-    
-    % if (LL ~= I)
-    %     error(' *** ERROR *** LOAD CASES ARE NOT IN ORDER');
-    % end
-    fprintf(IOUT, '\n\n        NODE       DIRECTION      LOAD\n');
-    fprintf(IOUT, '       NUMBER                   MAGNITUDE\n');
-    
-    for N = 1:NLOAD(I)
-        fprintf(IOUT,'%10d         %4d       %12.5e\n',...
-            NOD(N), IDIRN(N), FLOAD(N));
+    if NLOAD(I) > 0
+        fprintf(IOUT, '\n\n        NODE       DIRECTION      LOAD\n');
+        fprintf(IOUT, '       NUMBER                   MAGNITUDE\n');
+        for N = 1:NLOAD(I)
+            fprintf(IOUT,'%10d         %4d       %12.5e\n',...
+                NOD(N), IDIRN(N), FLOAD(N));
+        end
     end
 end
 end

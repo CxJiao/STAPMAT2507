@@ -36,17 +36,17 @@ classdef SolutionData
                   %                     2 : Y-direction;
                   %                     3 : Z-direction;
         FLOAD;    % double, FLOAD(NLOAD), Magnitude of load
-
-        
+        PRSID;    % int, PRSID(NUME), ID of pressure load applied on each plate elements
+        PRESS;    % double, PRESS(NSTEPS,max(PRSID)), time-variant pressure load of different PRSID
         
         % Element data
-        NUME;     % int, number of elements for TRUSS
+        NUME;     % int, number of elements for TRUSS & P4
         NUME2;    % int, number of elements for H20
         NNODE;    % int, number of nodes in an element
         NINIP;    % int, number of integration points in an element
         NDOF;     % int, the DOF of displacement
         NSTIFF;   % int, the number of number in element stiffness matrix
-        XYZ;      % double, XYZ(3*NNODE, NUME), element position for TRUSS
+        XYZ;      % double, XYZ(3*NNODE, NUME), element position for TRUSS &P4
         XYZ2;     % double, XYZ(3*NNODE, NUME2), element position for H20
         
         InitCoord;  % double array, integration coordinates
@@ -54,12 +54,13 @@ classdef SolutionData
         
         % Material data
         NUMMAT;     % int, the number of types of material 
-        E;          % double array, Young's Modulus for TRUSS
+        E;          % double array, Young's Modulus for TRUSS & P4
         E2;         % double array, Young's Modulus for H20
         nu;         % double array, possion ratio
         AREA;       % double array, cross-sectional constants
+        t;          % double array, plate thickness for P4 element
         rho;        % double array, density
-        MATP;       % int, MATP(NUME), types of elements for TRUSS
+        MATP;       % int, MATP(NUME), types of elements for TRUSS & P4
         MATP2;      % int, MATP(NUME), types of elements for H20
         
         % Solve data
@@ -102,6 +103,9 @@ classdef SolutionData
                   %                     2 : Y-direction;
                   %                     3 : Z-direction;
         DVNL;     % double(NSTEPS,NVNL), magtitude of Time-variant Load
+        TVLN;     % id of nodes who have the Time-variant Load
+        TVLD;     % THE direction of Time-variant Load of the corresponding node id
+        TVL;      % double(NSTEPS,TVLN), the total combined Time-variant Load
 
         % Result data
         DIS;      % double, DIS(NEQ, NLCASE), Displacement of nodes

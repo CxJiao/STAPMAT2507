@@ -1,0 +1,8 @@
+ E L E M E N T   I N F O R M A T I O N
+      ELEMENT                 NODE             MATERIAL      PRESSURE
+    NUMBER-N        A     B     C     D          SET                  SET
+
+
+  S T R E S S  C A L C U L A T I O N S  F O R  E L E M E N T  G R O U P    1
+            POINT  COORDINATE                                 STRAIN
+         X                  Y                  Z                 KX             KY            KXY

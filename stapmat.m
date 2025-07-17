@@ -23,12 +23,15 @@ sdata = SolutionData;
 
 % fname = 'H20.in';
 % fname = 'beam.in';
-fname = 'Dchair.in';
+% fname = 'Dchair.in';
+fname = 'PLATE01.in';
+fsave = 'test.OUT';
+% fsave='BEAMtest.OUT';
 
 ReadFile(fname);
 
 % Write basic data of program 
-WriteParasOut();
+WriteParasOut(fsave);
 
 % Form the stiffness matrix
 GetStiff();
@@ -65,12 +68,14 @@ clc;
 % addpath .\SRC\Mechanics
 % addpath .\SRC\Mechanics\Truss
 % addpath .\SRC\Mechanics\H20
+% addpath .\SRC\Mechanics\P4
 % addpath .\SRC\Solver
 addpath ./SRC/Initiation
 addpath ./SRC/BasicData
 addpath ./SRC/Mechanics
 addpath ./SRC/Mechanics/Truss
 addpath ./SRC/Mechanics/H20
+addpath ./SRC/Mechanics/P4
 addpath ./SRC/Solver
 end
 
