@@ -76,7 +76,7 @@ for N = 1:NUME
         Kb=zeros(12,12, 'double');
         for i = 1:3
             for j = 1:3
-                [Je,BDB,~]=C0stiff(DN,XN,YN,GC3(i),GC3(j),100*EN);
+                [Je,BDB,~]=C0stiff(DN,XN,YN,GC3(i),GC3(j),1000*EN);
                 Je=det(Je);
                 Kb=Kb+GW3(i)*GW3(j)*Je*BDB;
             end

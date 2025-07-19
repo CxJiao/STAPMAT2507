@@ -108,6 +108,7 @@ classdef SolutionData
         DIS;      % double, DIS(NEQ, NLCASE), Displacement of nodes
         STRAIN;   % double, STRAIN(NEQ, NLCASE), Strain
         STRESS;   % double, STRESS(NEQ, NLCASE), Stress
+        TDIS;     % cell, TDIS{NLCASE*[NSTEP,NEQ]}, Time-variant Displacement of node
         
     end
 end

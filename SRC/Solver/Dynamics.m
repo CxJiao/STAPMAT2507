@@ -27,7 +27,7 @@ ENDT = sdata.ENDTIME; dt = sdata.TimeStep; NSTEPS = sdata.NSTEPS;
 sdata.EnKine = zeros(NSTEPS,1); EnKine = sdata.EnKine;
 NVNL = sdata.NVNL; DLDC = sdata.DLDC; DNOD = sdata.DNOD;
 DDIRE = sdata.DDIRE; DVNL = sdata.DVNL; R = sdata.R;
-
+TDIS=sdata.TDIS{NLC}; % Time-variant variable
 STIFF = sdata.STIFF; MAXA = sdata.MAXA;
 if(sdata.MassType == 1)
     MASS = sdata.MASS;
@@ -58,6 +58,7 @@ if(InitialDis == 2)
     STIFF_LDLT = DLDLT(STIFF);
     Ddis = EquSol(STIFF_LDLT,R(:,NLC));
     sdata.Ddis = Ddis;
+    TDIS(:,1)=Ddis;
 end
 
 WriteDVA(0);
@@ -92,7 +93,7 @@ for I = 1:NVNL
     if(DLDC(I) == NLC)
         NLCloc = [NLCloc I];
         INDEX = ID(DDIRE(I),DNOD(I));
-        Df2(INDEX) = DVNL(1,I);
+        Df2(INDEX) = Df2(INDEX)+DVNL(1,I);
     end
 end
 
@@ -102,7 +103,7 @@ for I = 2:NSTEPS
     Ddis = sdata.Ddis; Dvol = sdata.Dvol; Dacc = sdata.Dacc;
     for J = 1:length(NLCloc)
             INDEX = ID(DDIRE(NLCloc(J)),DNOD(NLCloc(J)));
-            Df2(INDEX) = DVNL(I,NLCloc(J));
+            Df2(INDEX) = Df2(INDEX)+ DVNL(I,NLCloc(J));
     end
     Q = Sf + (1-af)*Df2 + af*Df1;
     
@@ -121,6 +122,7 @@ for I = 2:NSTEPS
     Dacc2 = (Ddis2-Ddis)/bdt2-Dvol/bdt-(1/2/b-1)*Dacc;
 
     sdata.Ddis = Ddis2; sdata.Dvol = Dvol2; sdata.Dacc = Dacc2;
+    TDIS(:,I)=Ddis2;
     WriteDVA(min((I-1)*dt,ENDT));% print current results
     if(sdata.MassType == 1)
         EnKine(I) = sum(MASS.*(Dvol2.^2))/2;
@@ -128,6 +130,7 @@ for I = 2:NSTEPS
         EnKine(I) = Dvol2'*KMul(MASS,Dvol2)/2;
     end
 end
+sdata.TDIS{NLC}=TDIS;
 % print Kinetic Energy
 TimeStamp = 0:dt:ENDT;
 if(TimeStamp(end) ~= ENDT) TimeStamp = [TimeStamp ENDT]; end

@@ -28,8 +28,13 @@ global sdata;
 
 NEQ = sdata.NEQ;
 NLCASE = cdata.NLCASE;
+NSTEPS = sdata.NSTEPS;
 MODEX = cdata.MODEX;
 sdata.DIS = zeros(NEQ, NLCASE, 'double');
+sdata.TDIS = cell(NLCASE);
+for i=1:NLCASE
+    sdata.TDIS{i}=zeros(NEQ,NSTEPS, 'double');
+end
 sdata.STRAIN = zeros(NEQ, NLCASE, 'double');
 sdata.STRESS = zeros(NEQ, NLCASE, 'double');
 

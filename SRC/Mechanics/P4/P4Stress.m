@@ -56,7 +56,7 @@ for N = 1:NUME
             [xx,yy] = RealCoor(Xs,Ys,GC3(i),GC3(j));
             xyz_int(:,index) = [xx; yy; 0.0];
             strain(:,index) = Be * dis; % (3,1) strain on Gauss point
-            stress(:,index) = DN * strain; % (3,1) stress on Gauss point
+            stress(:,index) = DN * strain(:,index); % (3,1) stress on Gauss point
             index = index + 1;
         end
     end
@@ -78,7 +78,7 @@ fprintf(IOUT, ['\n\n  S T R E S S  C A L C U L A T I O N S  F O R  ' ...
     '            POINT  COORDINATE                                 STRESS\n' ...
     '         X                  Y                  Z                 MX             MY            MXY\n'], NG);
 
-for index = 1:size(stress,1)
+for index = 1:9*NUME
     fprintf(IOUT, '%5e  ',xyz_int(:,index)');
     fprintf(IOUT, '   %13.6e',stress(:,index)');
     fprintf(IOUT, '\n');

@@ -24,8 +24,8 @@ sdata = SolutionData;
 % fname = 'H20.in';
 % fname = 'beam.in';
 % fname = 'Dchair.in';
-fname = 'PLATE01.in';
-fsave = 'test.OUT';
+fname = 'PLATE05.in';
+fsave = 'test5.OUT';
 % fsave='BEAMtest.OUT';
 
 ReadFile(fname);
