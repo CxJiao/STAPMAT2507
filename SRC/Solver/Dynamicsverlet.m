@@ -27,7 +27,7 @@ ENDT = sdata.ENDTIME; dt = sdata.TimeStep; NSTEPS = sdata.NSTEPS;
 sdata.EnKine = zeros(NSTEPS,1); EnKine = sdata.EnKine;
 NVNL = sdata.NVNL; DLDC = sdata.DLDC; DNOD = sdata.DNOD;
 DDIRE = sdata.DDIRE; DVNL = sdata.DVNL; R = sdata.R;
-
+TDIS=sdata.TDIS{NLC}; % Time-variant variable
 STIFF = sdata.STIFF; MAXA = sdata.MAXA;
 if(sdata.MassType == 1)
     MASS = sdata.MASS;
@@ -50,6 +50,7 @@ if(InitialDis == 2)
     STIFF_LDLT = DLDLT(STIFF);
     Ddis = EquSol(STIFF_LDLT,R(:,NLC));
     sdata.Ddis = Ddis;
+    TDIS(:,1)=Ddis;
 end
 
 Sf = R(:,NLC);  Df2 = zeros(size(Sf));%%Sf是时不变载荷，Df2是时变载荷
@@ -59,7 +60,7 @@ for I = 1:NVNL
     if(DLDC(I) == NLC)
         NLCloc = [NLCloc I];
         INDEX = ID(DDIRE(I),DNOD(I));
-        Df2(INDEX) = DVNL(1,I);
+        Df2(INDEX) = Df2(INDEX)+DVNL(1,I);
     end
 end
 
@@ -88,7 +89,7 @@ for I = 2:NSTEPS
     Ddis = sdata.Ddis; Dvol = sdata.Dvol; Dacc = sdata.Dacc;%%旧一步的位移、速度、加速度
     for J = 1:length(NLCloc)
             INDEX = ID(DDIRE(NLCloc(J)),DNOD(NLCloc(J)));
-            Df2(INDEX) = DVNL(I,NLCloc(J));
+            Df2(INDEX) = Df2(INDEX)+ DVNL(I,NLCloc(J));
     end
     Q_hat = Sf + Df2; %%新一步的载荷
     
@@ -103,6 +104,7 @@ for I = 2:NSTEPS
     Dvol2=vhalftime+0.5*dt*Dacc2;
     
     sdata.Ddis = Ddis2; sdata.Dvol = Dvol2; sdata.Dacc = Dacc2;%%新一时间步的位移、速度、加速度
+    TDIS(:,I)=Ddis2;
     WriteDVA(min((I-1)*dt,ENDT));% print current results
     if(sdata.MassType == 1)%%新一时间步的动能
         EnKine(I) = sum(MASS.*(Dvol2.^2))/2;
@@ -111,7 +113,7 @@ for I = 2:NSTEPS
     end
 end 
 %%这里时间步推进结束
-
+sdata.TDIS{NLC}=TDIS;
 
 % print Kinetic Energy
 TimeStamp = 0:dt:ENDT;

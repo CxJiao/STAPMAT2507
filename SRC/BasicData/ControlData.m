@@ -34,6 +34,7 @@ classdef ControlData
 
         IIN;           % file pointer used for input
         IOUT;          % file pointer used for output
+        IPOST;         % tecplot file for output
         
         numofeig;      %所需的特征对个数（小于总方程数，若不想求特征对，这里输入0）
         blocksize;     %运用块lanczos迭代的块尺寸

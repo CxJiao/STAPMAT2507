@@ -86,6 +86,7 @@ fprintf(IOUT, '  NUMBER-N        A     B     C     D          SET               
 % Get Position data
 NUME = cdata.NPAR(2,NG);
 sdata.XYZ = zeros(12, NUME, 'double');
+sdata.ELNOD = zeros(sdata.NNODE,NUME,'int64');
 sdata.MATP = zeros(1, NUME, 'int64');
 sdata.LM = zeros(12, NUME, 'double');
 sdata.MHT = zeros(sdata.NEQ, 1, 'int64');
@@ -102,7 +103,7 @@ for N = 1:NUME
     end
     MATP(N) = round(tmp(6)); 
     PRSID(N) = round(tmp(7));
-
+    sdata.ELNOD(:,N)=P4NODE;
     %   Save element information
     for i = 1:4
         XYZ(3*i-2) = X(P4NODE(i));
@@ -128,13 +129,6 @@ for N = 1:NUME
 end
 sdata.MATP = MATP;
 sdata.PRSID = PRSID;
-
-% Clear the memory of X, Y, Z
-if( NG == cdata.NUMEG )
-    sdata.X = double(0);
-    sdata.Y = double(0);
-    sdata.Z = double(0);
-end
 
 end
 

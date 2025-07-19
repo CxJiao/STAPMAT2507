@@ -48,7 +48,7 @@ classdef SolutionData
         NSTIFF;   % int, the number of number in element stiffness matrix
         XYZ;      % double, XYZ(3*NNODE, NUME), element position for TRUSS &P4
         XYZ2;     % double, XYZ(3*NNODE, NUME2), element position for H20
-        
+        ELNOD     % int, ELNOD(NNODE,NUME)
         InitCoord;  % double array, integration coordinates
         InitWeight; % double array, integration weights
         
@@ -108,7 +108,9 @@ classdef SolutionData
         DIS;      % double, DIS(NEQ, NLCASE), Displacement of nodes
         STRAIN;   % double, STRAIN(NEQ, NLCASE), Strain
         STRESS;   % double, STRESS(NEQ, NLCASE), Stress
-        TDIS;     % cell, TDIS{NLCASE*[NSTEP,NEQ]}, Time-variant Displacement of node
-        
+        TDIS;     % cell, TDIS{NLCASE*[NEQ,NSTEP]}, Time-variant Displacement of node
+        TDISW;    % cell, TDIS{NLCASE*[NUMNP,NSTEP]}, Time-variant Displacement w of node (for P4)
+        TSTRN;     % cell, TDIS{NLCASE*[NUME,NSTEP]}, Time-variant average stress of element
+        TSTRS;     % cell, TDIS{NLCASE*[NUME,NSTEP]}, Time-variant average strain of element
     end
 end

@@ -51,6 +51,11 @@ processstiff4eig2();%将问题转化为标准特征值问题
 blocklanczos();%进行块lanczos迭代
 end
 
+% PostProcess
+PostProcess('plate05.dat',['U']);
+wresult=sdata.TDISW{1};
+plot((0:5e-4:0.01),wresult(221,:))
+
 % Finalize
 Finalize();
 
@@ -77,6 +82,7 @@ addpath ./SRC/Mechanics/Truss
 addpath ./SRC/Mechanics/H20
 addpath ./SRC/Mechanics/P4
 addpath ./SRC/Solver
+addpath ./SRC
 end
 
 function Finalize()
@@ -111,4 +117,5 @@ fprintf(['\n' ...
 
 fclose(cdata.IIN);
 fclose(cdata.IOUT);
+fclose(cdata.IPOST);
 end

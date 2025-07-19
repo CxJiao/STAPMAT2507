@@ -29502,9 +29502,9 @@
 
  S O L U T I O N   T I M E   L O G   I N   S E C
 
-     TIME FOR INPUT PHASE  . . . . . . . . . . . . . . =         0.11
-     TIME FOR CALCULATION OF STIFFNESS MATRIX  . . . . =         0.25
-     TIME FOR FACTORIZATION OF STIFFNESS MATRIX  . . . =         3.94
+     TIME FOR INPUT PHASE  . . . . . . . . . . . . . . =         0.10
+     TIME FOR CALCULATION OF STIFFNESS MATRIX  . . . . =         0.24
+     TIME FOR FACTORIZATION OF STIFFNESS MATRIX  . . . =         3.91
      TIME FOR LOAD CASE SOLUTIONS  . . . . . . . . . . =         0.00
 
-      T O T A L   S O L U T I O N   T I M E  . . . . . =         4.30
+      T O T A L   S O L U T I O N   T I M E  . . . . . =         4.25

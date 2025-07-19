@@ -12,7 +12,7 @@
 %* *****************************************************************
 
 function P4Stress(NUM, NG)
-
+% only for static solve use
 % Get global data
 global cdata;
 global sdata;
